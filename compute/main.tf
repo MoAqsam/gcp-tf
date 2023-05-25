@@ -11,7 +11,7 @@ resource "google_project_iam_binding" "api_service" {
   project = var.project_id
   role    = "roles/editor"
   members = [
-    "serviceAccount:${google_service_account.rick_rolled.email}"
+    "serviceAccount:${google_service_account.rickrolled.email}"
   ]
 }
 
@@ -29,15 +29,15 @@ resource "google_project_service" "api_services" {
   disable_dependent_services = true
 }
 
-resource "google_service_account" "rick_rolled" {
-  account_id   = "rick_rolled"
+resource "google_service_account" "rickrolled" {
+  account_id   = "rickrolled"
   project = var.project_id
-  display_name = "rick_rolled"
-  description  = "Authorisation to use with rick_rolled and Compute Engine VM"
+  display_name = "rickrolled"
+  description  = "Authorisation to use with rickrolled and Compute Engine VM"
   depends_on   = [google_project_service.api_services]
 }
 
-resource "google_project_iam_member" "rick_rolled-service-account-iam" {
+resource "google_project_iam_member" "rickrolled-service-account-iam" {
   for_each = toset([
     "roles/iam.serviceAccountUser",
     "roles/run.admin",
@@ -47,12 +47,12 @@ resource "google_project_iam_member" "rick_rolled-service-account-iam" {
   ])
   role       = each.value
   project    = var.project_id
-  member     = "serviceAccount:${google_service_account.rick_rolled.email}"
+  member     = "serviceAccount:${google_service_account.rickrolled.email}"
   depends_on = [google_project_service.api_services]
 }
 
-resource "google_compute_instance" "rick_rolled-instance" {
-  name                    = "${var.project_id}-rick_rolled-instance"
+resource "google_compute_instance" "rickrolled-instance" {
+  name                    = "${var.project_id}-rickrolled-instance"
   project = var.project_id
   zone                    = var.zone
   machine_type            = "e2-micro"
@@ -77,7 +77,7 @@ resource "google_compute_instance" "rick_rolled-instance" {
     scopes = [
       "cloud-platform",
     ]
-    email = google_service_account.rick_rolled.email
+    email = google_service_account.rickrolled.email
   }
 
   depends_on = [google_project_service.api_services]
